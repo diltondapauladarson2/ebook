@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shop — The Pantry</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f3ef;
+      --ink: #111010;
+      --muted: #888;
+      --accent: #c8a96e;
+      --border: rgba(17,16,16,0.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 3rem;
+      background: rgba(245,243,239,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.25rem;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      color: var(--ink);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--ink); }
+
+    .page-header {
+      padding: 14rem 3rem 5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .page-tag {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+    }
+
+    .page-header h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.8rem, 6vw, 5.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      max-width: 18ch;
+    }
+
+    .page-header h1 em {
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    .page-header p {
+      margin-top: 1.8rem;
+      max-width: 42ch;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    .packages {
+      padding: 7rem 3rem;
+    }
+
+    .packages-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .card {
+      background: var(--bg);
+      padding: 3.5rem 2.8rem 3rem;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: background 0.3s;
+      animation: fadeUp 0.7s ease both;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .card:hover { background: #eeece8; }
+
+    .card:nth-child(1) { animation-delay: 0.05s; }
+    .card:nth-child(2) { animation-delay: 0.15s; background: var(--ink); color: #f5f3ef; }
+    .card:nth-child(2):hover { background: #1e1d1d; }
+    .card:nth-child(3) { animation-delay: 0.25s; }
+
+    .card:nth-child(2) .card-label,
+    .card:nth-child(2) .card-desc,
+    .card:nth-child(2) .card-divider { color: rgba(245,243,239,0.45); }
+
+    .card:nth-child(2) .card-divider-line { background: rgba(245,243,239,0.15); }
+
+    .card:nth-child(2)::before {
+      content: 'Best Seller';
+      position: absolute;
+      top: -1px; left: 2.8rem;
+      background: var(--accent);
+      color: var(--ink);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.8rem;
+      font-weight: 500;
+    }
+
+    .card-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.4rem;
+    }
+
+    .card-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.9rem;
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 2rem;
+    }
+
+    .card:nth-child(2) .card-name { color: #f5f3ef; }
+
+    .card-price {
+      display: flex;
+      align-items: baseline;
+      gap: 0.3rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .price-currency {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+      color: var(--accent);
+      align-self: flex-start;
+      margin-top: 0.3rem;
+    }
+
+    .price-amount {
+      font-family: 'DM Serif Display', serif;
+      font-size: 4rem;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .card:nth-child(2) .price-amount { color: #f5f3ef; }
+
+    .card-divider {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.8rem;
+    }
+
+    .card-divider-line {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 2.5rem;
+    }
+
+    .card-desc {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.85;
+      flex: 1;
+      margin-bottom: 3rem;
+    }
+
+    .card-cta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.4rem;
+      background: var(--ink);
+      color: var(--bg);
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 500;
+      border: 1px solid var(--ink);
+      transition: background 0.22s, color 0.22s, border-color 0.22s;
+    }
+
+    .card:hover .card-cta {
+      background: var(--accent);
+      color: var(--ink);
+      border-color: var(--accent);
+    }
+
+    .card:nth-child(2) .card-cta {
+      background: var(--accent);
+      color: var(--ink);
+      border-color: var(--accent);
+    }
+
+    .card:nth-child(2):hover .card-cta {
+      background: #f5f3ef;
+      border-color: #f5f3ef;
+      color: var(--ink);
+    }
+
+    .card-cta svg { transition: transform 0.2s; }
+    .card:hover .card-cta svg { transform: translateX(4px); }
+
+    .packages-footer {
+      margin-top: 4rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      padding-top: 3rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .packages-footer p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      max-width: 50ch;
+      line-height: 1.7;
+    }
+
+    .packages-footer a {
+      color: var(--ink);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    footer a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    footer a:hover { color: var(--ink); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 960px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .page-header { padding: 10rem 1.5rem 4rem; }
+      .packages { padding: 5rem 1.5rem; }
+      .packages-grid { grid-template-columns: 1fr; }
+      .card:nth-child(2)::before { left: 1.8rem; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="logo" href="index.html">The Pantry.</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Books</a></li>
+      <li><a href="index.html#categories">Categories</a></li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="product.html" class="active">Shop</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-header">
+    <p class="page-tag">Culinary eBooks</p>
+    <h1>Simple pricing, <em>delicious</em> results.</h1>
+    <p>One-time payments. Instant download. Pick the eBook that matches your culinary journey and start cooking today.</p>
+  </div>
+
+  <section class="packages">
+    <div class="packages-grid">
+
+      <!-- EBOOK 01 -->
+      <a class="card" href="package-1.html">
+        <span class="card-label">eBook 01</span>
+        <h2 class="card-name">Everyday Kitchen</h2>
+        <div class="card-price">
+          <span class="price-currency">$</span>
+          <span class="price-amount">35</span>
+        </div>
+        <div class="card-divider">Includes</div>
+        <div class="card-divider-line"></div>
+        <p class="card-desc">
+          50 quick, wholesome weekday recipes. Perfect for busy home cooks who want flavourful meals without spending hours in the kitchen.
+        </p>
+        <div class="card-cta">
+          Get eBook
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </a>
+
+      <!-- EBOOK 02 (featured) -->
+      <a class="card" href="package-2.html">
+        <span class="card-label">eBook 02</span>
+        <h2 class="card-name">World Flavours</h2>
+        <div class="card-price">
+          <span class="price-currency">$</span>
+          <span class="price-amount">65</span>
+        </div>
+        <div class="card-divider">Includes</div>
+        <div class="card-divider-line"></div>
+        <p class="card-desc">
+          A journey through 10 global cuisines: Italy, Japan, Mexico, Lebanon, India, and more. 80 authentic recipes with technique guides and ingredient notes.
+        </p>
+        <div class="card-cta">
+          Get eBook
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </a>
+
+      <!-- EBOOK 03 -->
+      <a class="card" href="package-3.html">
+        <span class="card-label">eBook 03</span>
+        <h2 class="card-name">The Complete Collection</h2>
+        <div class="card-price">
+          <span class="price-currency">$</span>
+          <span class="price-amount">145</span>
+        </div>
+        <div class="card-divider">Includes</div>
+        <div class="card-divider-line"></div>
+        <p class="card-desc">
+          All three eBooks bundled: Everyday Kitchen, World Flavours, and The Pastry Studio. 200+ recipes, technique masterclasses, and a seasonal meal planner. The full culinary library.
+        </p>
+        <div class="card-cta">
+          Get Bundle
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="packages-footer">
+      <p>Not sure which eBook suits you best? <a href="mailto:hello@thepantry.com">Send us a message</a> and we'll help you choose.</p>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2025 The Pantry. All rights reserved.</span>
+    <div style="display:flex;gap:2rem;">
+      <a href="product.html">Shop</a>
+      <a href="mailto:hello@thepantry.com">hello@thepantry.com</a>
+    </div>
+  </footer>
+
+</body>
+</html>
